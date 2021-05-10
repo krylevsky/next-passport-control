@@ -1,25 +1,25 @@
 import session from 'express-session';
 import passport from 'passport';
 
-function runMiddleware(req, res, fn) {
-	return new Promise((resolve, reject) => {
-		fn(req, res, (result) => {
-			if (result instanceof Error) {
-				return reject(result)
-			}
+export default function(settingsCallback) {
+	if(process.browser) return {};
 
-			return resolve(result)
-		});
-	})
-}
+	function runMiddleware(req, res, fn) {
+		return new Promise((resolve, reject) => {
+			fn(req, res, (result) => {
+				if (result instanceof Error) {
+					return reject(result)
+				}
 
-if(!process.browser) {
+				return resolve(result)
+			});
+		})
+	}
+
+	const sessionOptions = settingsCallback(session);
+
 	const baseMiddlewares = [
-		session({
-			secret: process.env.SECRET_COOKIE_PASSWORD,
-			resave: true,
-			saveUninitialized: true,
-		}),
+		session(sessionOptions),
 		passport.initialize(),
 		passport.session(),
 	];
@@ -83,12 +83,12 @@ if(!process.browser) {
 		await applyMiddlewares(req, res);
 		return req.user;
 	}
-}
-
-export {
-	access,
-	control,
-	auth,
-	getUser,
-	passport,
+	
+	return {
+		access,
+		control,
+		auth,
+		getUser,
+		passport,
+	};
 }
