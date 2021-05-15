@@ -1,6 +1,5 @@
 {
   "name": "next-passport-control",
-  "type": "module",
   "version": "1.0.2",
   "description": "Passport for Next.js",
   "main": "index.js",

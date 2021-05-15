@@ -1,7 +1,7 @@
-import session from 'express-session';
-import passport from 'passport';
+const session = require('express-session');
+	passport = require('passport');
 
-export default function(settingsCallback) {
+module.exports = function(settingsCallback) {
 	if(process.browser) return {};
 
 	function runMiddleware(req, res, fn) {
